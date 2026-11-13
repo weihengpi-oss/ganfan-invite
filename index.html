@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>干饭邀请函</title>
+<style>
+  :root {
+    --red: #d81b60;
+    --deep: #8e0e3e;
+    --gold: #b8860b;
+    --bg: #fff7f3;
+    --card: #ffffff;
+    --ink: #3b2b2b;
+    --muted: #9b8383;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(216,27,96,.10), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(184,134,11,.10), transparent 42%),
+      var(--bg);
+    color: var(--ink);
+    padding: 20px 14px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .wrap { width: 100%; max-width: 460px; }
+
+  /* ---------- 邀请卡片 ---------- */
+  .card {
+    background: var(--card);
+    border: 1px solid rgba(216,27,96,.18);
+    border-radius: 22px;
+    box-shadow: 0 10px 32px rgba(142,14,62,.10);
+    padding: 26px 20px 22px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(216,27,96,.05), transparent 30%);
+    pointer-events: none;
+  }
+  .title { font-size: 24px; font-weight: 700; color: var(--red); margin: 0 0 6px; }
+  .sub   { font-size: 16px; color: var(--deep); margin: 0 0 4px; letter-spacing: .5px; }
+  .sub b { color: var(--gold); font-weight: 700; }
+  .hook  { font-size: 17px; font-weight: 600; color: var(--deep); margin: 0 0 16px; }
+  .divider {
+    border: none; border-top: 1.5px dashed rgba(184,134,11,.45);
+    margin: 14px 0;
+    position: relative;
+  }
+  .divider::after {
+    content: "囍";
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    background: var(--card); padding: 0 10px;
+    color: var(--red); font-size: 15px; font-weight: 700;
+  }
+  .invite-body { font-size: 15px; line-height: 1.9; margin: 0; text-align: left; }
+  .info-row { display: flex; gap: 8px; align-items: baseline; }
+  .info-row .k { color: var(--muted); flex: none; }
+  .info-row .v { font-weight: 600; color: var(--deep); word-break: break-all; }
+  .ps { font-size: 13px; color: var(--muted); margin-top: 14px; }
+  .burst { font-size: 26px; margin-top: 10px; letter-spacing: 6px; min-height: 34px; }
+
+  /* ---------- 表单 ---------- */
+  .panel {
+    background: var(--card);
+    border: 1px solid rgba(216,27,96,.14);
+    border-radius: 18px;
+    padding: 18px 16px;
+    margin-top: 14px;
+  }
+  .panel h2 { font-size: 15px; margin: 0 0 12px; color: var(--deep); display: flex; align-items: center; gap: 6px; }
+  label { display: block; margin-bottom: 12px; }
+  label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; }
+  input[type="date"], input[type="text"] {
+    width: 100%;
+    font-size: 16px;
+    color: var(--ink);
+    background: #fdf3f5;
+    border: 1.5px solid #f0cdd8;
+    border-radius: 12px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  input:focus { border-color: var(--red); background: #fff; }
+  .btn {
+    appearance: none; border: none; cursor: pointer;
+    width: 100%;
+    font-size: 16px; font-weight: 600;
+    border-radius: 14px;
+    padding: 13px;
+    margin-top: 8px;
+    transition: transform .06s, opacity .15s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: linear-gradient(135deg, #e91e63, #c2185b); color: #fff; box-shadow: 0 6px 16px rgba(216,27,96,.30); }
+  .btn-ghost { background: #fff; color: var(--red); border: 1.5px solid var(--red); }
+  .btn-plain { background: transparent; color: var(--muted); font-weight: 500; padding: 8px; margin-top: 2px; }
+  .btn-row { display: flex; gap: 10px; }
+  .btn-row .btn { flex: 1; }
+
+  /* ---------- 提示条 ---------- */
+  #toast {
+    position: fixed; left: 50%; bottom: 34px;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(59,43,43,.92); color: #fff;
+    font-size: 14px; padding: 10px 18px; border-radius: 999px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    max-width: 86vw; text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card">
+    <p class="title">❤️🏮邀请函🏮❤️</p>
+    <p class="sub">囍 <b>Let's have a meal</b> 囍</p>
+    <p class="hook">💖 ~下班自助干饭啦~ 💖</p>
+    <hr class="divider">
+    <p class="invite-body">喜相逢佳期已定，敬备自助筵，诚邀您一起下班炫自助：</p>
+    <div class="invite-body" style="margin-top:8px">
+      <div class="info-row"><span class="k">📅 日期</span><span class="v" id="pv-date"></span></div>
+      <div class="info-row"><span class="k">🏪 餐厅</span><span class="v" id="pv-restaurant"></span></div>
+      <div class="info-row"><span class="k">📍 地址</span><span class="v" id="pv-address"></span></div>
+      <div class="info-row"><span class="k">🔖 暗号</span><span class="v" id="pv-note"></span></div>
+    </div>
+    <p class="ps">不来？那你看着我们吃！😉</p>
+    <div class="burst" id="burst"></div>
+  </div>
+
+  <div class="panel">
+    <h2>✏️ 改成你的内容</h2>
+    <label><span>日期</span><input type="date" id="f-date"></label>
+    <label><span>餐厅</span><input type="text" id="f-restaurant" placeholder="比如：某捞自助火锅" maxlength="24"></label>
+    <label><span>地址</span><input type="text" id="f-address" placeholder="XX路XX号XX商场3楼" maxlength="60"></label>
+    <label><span>暗号（可选）</span><input type="text" id="f-note" placeholder="迟到罚三杯 🍻" maxlength="30"></label>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-copy">📋 复制文案</button>
+      <button class="btn btn-ghost" id="btn-share">📤 分享</button>
+    </div>
+    <button class="btn btn-plain" id="btn-link">🔗 复制带内容的链接</button>
+  </div>
+
+  <p class="foot">改好内容后，把文案或链接发给饭搭子即可 🍚</p>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var defaults = {
+    date: "2026-11-20",
+    restaurant: "某捞自助火锅",
+    address: "XX路XX号XX商场3楼",
+    note: "迟到罚三杯 🍻"
+  };
+
+  // URL 参数预填：?date=…&restaurant=…&address=…&note=…
+  var q = new URLSearchParams(location.search);
+  function pick(key) { return (q.get(key) || "").trim(); }
+  var state = {
+    date: pick("date") || defaults.date,
+    restaurant: pick("restaurant") || defaults.restaurant,
+    address: pick("address") || defaults.address,
+    note: pick("note") !== "" ? pick("note") : defaults.note
+  };
+
+  $("f-date").value = state.date;
+  $("f-restaurant").value = state.restaurant;
+  $("f-address").value = state.address;
+  $("f-note").value = state.note;
+
+  function refresh() {
+    state.date = $("f-date").value || defaults.date;
+    state.restaurant = $("f-restaurant").value.trim() || "（待定）";
+    state.address = $("f-address").value.trim() || "（待定）";
+    state.note = $("f-note").value.trim() || "（无）";
+    $("pv-date").textContent = state.date;
+    $("pv-restaurant").textContent = state.restaurant;
+    $("pv-address").textContent = state.address;
+    $("pv-note").textContent = state.note;
+    try { history.replaceState(null, "", buildUrl(state)); } catch (e) {}
+  }
+
+  function buildUrl(s) {
+    var u = new URL(location.href);
+    u.search = "";
+    ["date", "restaurant", "address", "note"].forEach(function (k) {
+      if (s[k] && !s[k].includes("待定") && s[k] !== defaults[k]) u.searchParams.set(k, s[k]);
+    });
+    return u.toString();
+  }
+
+  function inviteText(s) {
+    return [
+      "❤️🏮邀请函🏮❤️",
+      "囍 · Let's have a meal 囍",
+      "💖 ~下班自助干饭啦~ 💖",
+      "",
+      "喜相逢佳期已定，敬备自助筵，诚邀您一起下班炫自助：",
+      "",
+      "📅 日期：" + s.date,
+      "🏪 餐厅：" + s.restaurant,
+      "📍 地址：" + s.address,
+      "🔖 暗号：" + s.note,
+      "",
+      "不来？那你看着我们吃！😉"
+    ].join("\n");
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  function copy(text, okMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { toast(okMsg); },
+        function () { fallbackCopy(text, okMsg); }
+      );
+    } else { fallbackCopy(text, okMsg); }
+  }
+  function fallbackCopy(text, okMsg) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); toast(okMsg); }
+    catch (e) { toast("复制失败，请长按手动复制"); }
+    document.body.removeChild(ta);
+  }
+
+  ["f-date", "f-restaurant", "f-address", "f-note"].forEach(function (id) {
+    $(id).addEventListener("input", refresh);
+  });
+
+  $("btn-copy").addEventListener("click", function () {
+    refresh();
+    copy(inviteText(state), "邀请文案已复制 📋");
+    burst();
+  });
+
+  $("btn-link").addEventListener("click", function () {
+    refresh();
+    copy(buildUrl(state), "带内容的链接已复制 🔗");
+  });
+
+  $("btn-share").addEventListener("click", function () {
+    refresh();
+    var data = { title: "干饭邀请函", text: inviteText(state), url: location.href };
+    if (navigator.share) {
+      navigator.share(data).catch(function () {});
+    } else {
+      copy(inviteText(state), "已复制，去粘贴给好友吧 📤");
+    }
+  });
+
+  var emojis = ["🎉", "🍖", "🥂", "🦐", "🍰", "🍻", "🥩", "🍣"];
+  function burst() {
+    var b = $("burst");
+    var s = "";
+    for (var i = 0; i < 8; i++) s += emojis[Math.floor(Math.random() * emojis.length)];
+    b.textContent = s;
+    b.animate(
+      [{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }],
+      { duration: 350, easing: "ease-out" }
+    );
+  }
+
+  refresh();
+})();
+</script>
+</body>
+</html>
